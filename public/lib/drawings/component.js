@@ -1,5 +1,5 @@
-import drawingsStore from './drawings-store'
-import drawingsView from './drawings-view'
+import drawingsStore from './store'
+import drawingsView from './view'
 
 export default function(){
   var store = drawingsStore();
