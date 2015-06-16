@@ -6,14 +6,13 @@ import drawings from './drawings-store'
 import {events} from './constants'
 
 var socket = io();
-var canvasElem = $('#canvas');
 
 var actions = {
   paint: false,
 
   mouseDown: function(e){
-    let mouseX = e.pageX - this.offsetLeft;
-    let mouseY = e.pageY - this.offsetTop;
+    var mouseX = e.pageX - this.offsetLeft;
+    var mouseY = e.pageY - this.offsetTop;
 
     this.paint = true;
     PubSub.publish(events.DRAWING_CREATED, {x: mouseX, y: mouseY});

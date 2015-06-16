@@ -1,7 +1,7 @@
 class Canvas {
   constructor(width, height, actions, store){
-    let canvasDiv = document.getElementById('canvasDiv');
-    let canvas = document.createElement('canvas');
+    var canvasDiv = document.getElementById('canvasDiv');
+    var canvas = document.createElement('canvas');
     canvas.setAttribute('width', width);
     canvas.setAttribute('height', height);
     canvas.setAttribute('id', 'canvas');
@@ -14,7 +14,7 @@ class Canvas {
     this.context = canvas.getContext("2d");
 
     //TODO: remove jQuery
-    let $canvas = $(canvas);
+    var $canvas = $(canvas);
     $canvas.on('mousedown', actions.mouseDown);
     $canvas.on('mousemove', actions.mouseMove);
     $canvas.on('mouseup', actions.mouseUp);
@@ -39,16 +39,16 @@ class Canvas {
   }
 
   redraw(xs, ys, drags){
-    let context = this.context;
+    var context = this.context;
     this.clear();
     this.setDefaultDrawingStyle();
 
-    for (var i = 0; i < xs.length; i++) {
+    for (let i = 0; i < xs.length; i++) {
       context.beginPath();
       if (drags[i] && i) {
         context.moveTo(xs[i - 1], ys[i - 1]);
       } else {
-        context.moveTo(xs[i] - 1, ys[i]);
+        context.moveTo(xs[i]-1, ys[i]);
       }
       context.lineTo(xs[i], ys[i]);
       context.closePath();
