@@ -17,8 +17,8 @@ io.on('connection', function(socket){
     console.log('user disconnected');
   });
 
-  socket.on('draw:committed', function(x, y, dragging){
-    socket.broadcast.emit('draw:fromServer', x, y, dragging);
+  socket.on('draw:committed', function(data){
+    socket.broadcast.emit('draw:fromServer', data);
   });
 });
 

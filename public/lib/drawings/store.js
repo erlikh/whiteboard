@@ -6,24 +6,25 @@ var socket = io();
 
 class DrawingsStore {
   constructor(){
-    this.xs = [];
-    this.ys = [];
-    this.draggs = [];
+    this.diffs = [];
     this.observers = [];
+
     PubSub.subscribe(events.DRAWING_CREATED, this.commit.bind(this));
     PubSub.subscribe(events.DRAWING_FETCHED, this.update.bind(this));
   }
 
+  get data() {
+    return this.diffs
+  }
+
   update(_, data){
-    this.xs.push(data.x);
-    this.ys.push(data.y);
-    this.draggs.push(data.dragging);
+    this.diffs.push(data);
     this.notifyObservers();
   }
 
   commit(_, data){
     this.update(null, data);
-    socket.emit('draw:committed', data.x, data.y, data.dragging, socket.id);
+    socket.emit('draw:committed', data);
   }
 
   registerObserver(cb){

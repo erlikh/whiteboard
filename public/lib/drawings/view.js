@@ -15,7 +15,7 @@ class DrawingsCanvas {
   }
 
   storeUpdated(){
-    this.redraw(this.store.xs, this.store.ys, this.store.draggs);
+    this.redraw(this.store.data);
   }
 
   clear(){
@@ -28,22 +28,24 @@ class DrawingsCanvas {
     this.context.lineWidth = 5;
   }
 
-  redraw(xs, ys, drags){
-    var context = this.context;
+  redraw(diffs){
+    var cx = this.context;
     this.clear();
     this.setDefaultDrawingStyle();
 
-    for (let i = 0; i < xs.length; i++) {
-      context.beginPath();
-      if (drags[i] && i) {
-        context.moveTo(xs[i - 1], ys[i - 1]);
+    diffs.forEach((diff, i) => {
+      cx.beginPath();
+
+      if (diff.dragging && i) {
+        cx.moveTo(diffs[i - 1].x, diffs[i - 1].y);
       } else {
-        context.moveTo(xs[i]-1, ys[i]);
+        cx.moveTo(diff.x-1, diff.y);
       }
-      context.lineTo(xs[i], ys[i]);
-      context.closePath();
-      context.stroke();
-    }
+
+      cx.lineTo(diff.x, diff.y);
+      cx.closePath();
+      cx.stroke();
+    });
   }
 }
 
