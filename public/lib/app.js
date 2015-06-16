@@ -1,15 +1,13 @@
 import $ from 'jquery'
-import Canvas from './canvas'
 import io from 'socket.io-client'
+import canvas from './canvas'
 
 var socket = io();
-
-let canv = new Canvas(500, 500);
-
-var canvas = $('#canvas');
+var canv = canvas(500, 500);
+var canvasElem = $('#canvas');
 var paint;
 
-canvas.mousedown(function(e){
+canvasElem.mousedown(function(e){
   let mouseX = e.pageX - this.offsetLeft;
   let mouseY = e.pageY - this.offsetTop;
 
@@ -17,17 +15,17 @@ canvas.mousedown(function(e){
   commit(mouseX, mouseY);
 });
 
-canvas.mousemove(function(e){
+canvasElem.mousemove(function(e){
   if(paint){
     commit(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
   }
 });
 
-canvas.mouseup(function(e){
+canvasElem.mouseup(function(e){
   paint = false;
 });
 
-canvas.mouseleave(function(e){
+canvasElem.mouseleave(function(e){
   paint = false;
 });
 

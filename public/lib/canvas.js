@@ -45,4 +45,6 @@ class Canvas {
   }
 }
 
-export default Canvas
+export default function(w, h){
+  return new Canvas(w, h);
+}
