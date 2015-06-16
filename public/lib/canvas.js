@@ -17,13 +17,13 @@ class Canvas {
   }
 
   clear(){
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+    this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
   }
 
   setDefaultDrawingStyle(){
-    context.strokeStyle = "#df4b26";
-    context.lineJoin = "round";
-    context.lineWidth = 5;
+    this.context.strokeStyle = "#df4b26";
+    this.context.lineJoin = "round";
+    this.context.lineWidth = 5;
   }
 
   redraw(xs, ys, drags){
