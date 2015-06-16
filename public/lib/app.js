@@ -1,2 +1,3 @@
-import {test} from './test';
-test();
+import {create} from './canvas'
+
+create(500, 500);
