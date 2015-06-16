@@ -1,7 +1,8 @@
 import $ from 'jquery'
-import { create, redraw } from './canvas'
+import Canvas from './canvas'
 
-var context = create(500, 500);
+let canv = new Canvas(500, 500);
+
 var canvas = $('#canvas');
 var paint;
 
@@ -33,5 +34,5 @@ function addClick(x, y, dragging){
   xs.push(x);
   ys.push(y);
   drags.push(dragging);
-  redraw(xs, ys, drags, context);
+  canv.redraw(xs, ys, drags);
 }
