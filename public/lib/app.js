@@ -45,7 +45,6 @@ function commit(x, y, dragging){
   socket.emit('draw:committed', x, y, dragging, socket.id);
 }
 
-socket.on('draw:committed', function(x, y, dragging, clientId){
-  if(clientId === socket.id) return;
+socket.on('draw:fromServer', function(x, y, dragging){
   changeModel(x, y, dragging);
 });
