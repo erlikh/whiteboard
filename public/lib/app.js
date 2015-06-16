@@ -1,48 +1,55 @@
 import $ from 'jquery'
 import io from 'socket.io-client'
+import pubsub from 'pubsub-js'
 import canvas from './canvas'
+import drawings from './drawings'
 
 var socket = io();
-var canv = canvas(500, 500);
 var canvasElem = $('#canvas');
-var paint;
 
-canvasElem.mousedown(function(e){
-  let mouseX = e.pageX - this.offsetLeft;
-  let mouseY = e.pageY - this.offsetTop;
+class App {
+  constructor(){
+    this.events = {
+      DRAWING_CREATED: 'DRAWING_CREATED',
+      DRAWING_FETCHED: 'DRAWING_FETCHED'
+    };
 
-  paint = true;
-  commit(mouseX, mouseY);
-});
+    this.actions = {
+      paint: false,
 
-canvasElem.mousemove(function(e){
-  if(paint){
-    commit(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+      mouseDown: function(e){
+        console.log(this);
+        let mouseX = e.pageX - this.offsetLeft;
+        let mouseY = e.pageY - this.offsetTop;
+
+        this.paint = true;
+        commit(mouseX, mouseY);
+      },
+
+      mouseUp: function(e){
+        this.paint = false;
+      },
+
+      mouseLeave: function(e){
+        this.paint = false;
+      },
+
+      mouseMove: function(e){
+        if(this.paint){
+          commit(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+        }
+      },
+
+      drawingFetched: function(x, y, dragging){
+        changeModel(x, y, dragging);
+      }
+    };
+
+    this.view = canvas(500, 500, this.actions);
+    this.store = drawings();
+
+    socket.on('draw:fromServer', this.actions.drawingFetched);
   }
-});
-
-canvasElem.mouseup(function(e){
-  paint = false;
-});
-
-canvasElem.mouseleave(function(e){
-  paint = false;
-});
-
-var xs = [], ys = [], drags = [];
-
-function changeModel(x, y, dragging){
-  xs.push(x);
-  ys.push(y);
-  drags.push(dragging);
-  canv.redraw(xs, ys, drags);
 }
 
-function commit(x, y, dragging){
-  changeModel(x, y, dragging);
-  socket.emit('draw:committed', x, y, dragging, socket.id);
-}
-
-socket.on('draw:fromServer', function(x, y, dragging){
-  changeModel(x, y, dragging);
-});
+new App();

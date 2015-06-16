@@ -1,12 +1,10 @@
 class Canvas {
-  constructor(width, height){
+  constructor(width, height, actions){
     let canvasDiv = document.getElementById('canvasDiv');
     let canvas = document.createElement('canvas');
-
     canvas.setAttribute('width', width);
     canvas.setAttribute('height', height);
     canvas.setAttribute('id', 'canvas');
-
     canvasDiv.appendChild(canvas);
 
     if (typeof G_vmlCanvasManager !== 'undefined') {
@@ -14,6 +12,14 @@ class Canvas {
     }
 
     this.context = canvas.getContext("2d");
+    console.log(actions);
+
+    //TODO: remove jQuery
+    let $canvas = $(canvas);
+    $canvas.on('mousedown', actions.mouseDown);
+    $canvas.on('mousemove', actions.mouseMove);
+    $canvas.on('mouseup', actions.mouseUp);
+    $canvas.on('mouseleave', actions.mouseLeave);
   }
 
   clear(){
@@ -45,6 +51,6 @@ class Canvas {
   }
 }
 
-export default function(w, h){
-  return new Canvas(w, h);
+export default function(w, h, actions){
+  return new Canvas(w, h, actions);
 }
