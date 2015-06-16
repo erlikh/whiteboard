@@ -1,0 +1,4 @@
+export const events = {
+  DRAWING_CREATED: 'DRAWING_CREATED',
+  DRAWING_FETCHED: 'DRAWING_FETCHED'
+};

@@ -1,55 +1,44 @@
 import $ from 'jquery'
 import io from 'socket.io-client'
-import pubsub from 'pubsub-js'
+import PubSub from 'pubsub-js'
 import canvas from './canvas'
-import drawings from './drawings'
+import drawings from './drawings-store'
+import {events} from './constants'
 
 var socket = io();
 var canvasElem = $('#canvas');
 
-class App {
-  constructor(){
-    this.events = {
-      DRAWING_CREATED: 'DRAWING_CREATED',
-      DRAWING_FETCHED: 'DRAWING_FETCHED'
-    };
+var actions = {
+  paint: false,
 
-    this.actions = {
-      paint: false,
+  mouseDown: function(e){
+    let mouseX = e.pageX - this.offsetLeft;
+    let mouseY = e.pageY - this.offsetTop;
 
-      mouseDown: function(e){
-        console.log(this);
-        let mouseX = e.pageX - this.offsetLeft;
-        let mouseY = e.pageY - this.offsetTop;
+    this.paint = true;
+    PubSub.publish(events.DRAWING_CREATED, {x: mouseX, y: mouseY});
+  },
 
-        this.paint = true;
-        commit(mouseX, mouseY);
-      },
+  mouseUp: function(e){
+    this.paint = false;
+  },
 
-      mouseUp: function(e){
-        this.paint = false;
-      },
+  mouseLeave: function(e){
+    this.paint = false;
+  },
 
-      mouseLeave: function(e){
-        this.paint = false;
-      },
+  mouseMove: function(e){
+    if(this.paint){
+      PubSub.publish(events.DRAWING_CREATED, {x:e.pageX - this.offsetLeft, y: e.pageY - this.offsetTop, dragging: true});
+    }
+  },
 
-      mouseMove: function(e){
-        if(this.paint){
-          commit(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
-        }
-      },
-
-      drawingFetched: function(x, y, dragging){
-        changeModel(x, y, dragging);
-      }
-    };
-
-    this.view = canvas(500, 500, this.actions);
-    this.store = drawings();
-
-    socket.on('draw:fromServer', this.actions.drawingFetched);
+  drawingFetched: function(x, y, dragging){
+    PubSub.publish(events.DRAWING_FETCHED, {x: x, y: y, dragging: dragging});
   }
-}
+};
 
-new App();
+var store = drawings();
+var view = canvas(500, 500, actions, store);
+
+socket.on('draw:fromServer', actions.drawingFetched);

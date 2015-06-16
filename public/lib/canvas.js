@@ -1,5 +1,5 @@
 class Canvas {
-  constructor(width, height, actions){
+  constructor(width, height, actions, store){
     let canvasDiv = document.getElementById('canvasDiv');
     let canvas = document.createElement('canvas');
     canvas.setAttribute('width', width);
@@ -12,7 +12,6 @@ class Canvas {
     }
 
     this.context = canvas.getContext("2d");
-    console.log(actions);
 
     //TODO: remove jQuery
     let $canvas = $(canvas);
@@ -20,6 +19,13 @@ class Canvas {
     $canvas.on('mousemove', actions.mouseMove);
     $canvas.on('mouseup', actions.mouseUp);
     $canvas.on('mouseleave', actions.mouseLeave);
+
+    this.store = store;
+    store.registerObserver(this.storeUpdated.bind(this));
+  }
+
+  storeUpdated(){
+    this.redraw(this.store.xs, this.store.ys, this.store.draggs);
   }
 
   clear(){
@@ -51,6 +57,6 @@ class Canvas {
   }
 }
 
-export default function(w, h, actions){
-  return new Canvas(w, h, actions);
+export default function(w, h, actions, store){
+  return new Canvas(w, h, actions, store);
 }
