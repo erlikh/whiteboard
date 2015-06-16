@@ -1,5 +1,5 @@
 import PubSub from 'pubsub-js'
-import {events} from './constants'
+import {events} from '../constants'
 import io from 'socket.io-client'
 
 var socket = io();

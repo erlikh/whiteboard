@@ -1,3 +1,5 @@
+import $ from 'jquery'
+
 class Canvas {
   constructor(width, height, actions, store){
     var canvasDiv = document.getElementById('canvasDiv');
