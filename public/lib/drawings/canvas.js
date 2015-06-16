@@ -1,28 +1,14 @@
-import $ from 'jquery'
-
 class Canvas {
   constructor(width, height, actions, store){
-    var canvasDiv = document.getElementById('canvasDiv');
-    var canvas = document.createElement('canvas');
-    canvas.setAttribute('width', width);
-    canvas.setAttribute('height', height);
-    canvas.setAttribute('id', 'canvas');
-    canvasDiv.appendChild(canvas);
-
-    if (typeof G_vmlCanvasManager !== 'undefined') {
-      canvas = G_vmlCanvasManager.initElement(canvas);
-    }
-
-    this.context = canvas.getContext("2d");
-
-    //TODO: remove jQuery
-    var $canvas = $(canvas);
-    $canvas.on('mousedown', actions.mouseDown);
-    $canvas.on('mousemove', actions.mouseMove);
-    $canvas.on('mouseup', actions.mouseUp);
-    $canvas.on('mouseleave', actions.mouseLeave);
-
+    var canvas = document.getElementById('drawingsCanvas');
+    this.context = canvas.getContext('2d');
     this.store = store;
+
+    canvas.addEventListener('mousedown', actions.mouseDown);
+    canvas.addEventListener('mousemove', actions.mouseMove);
+    canvas.addEventListener('mouseup', actions.mouseUp);
+    canvas.addEventListener('mouseleave', actions.mouseLeave);
+
     store.registerObserver(this.storeUpdated.bind(this));
   }
 

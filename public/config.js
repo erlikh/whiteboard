@@ -10,7 +10,6 @@ System.config({
 
 System.config({
   "map": {
-    "jquery": "github:components/jquery@2.1.4",
     "pubsub-js": "npm:pubsub-js@1.5.2",
     "socket.io-client": "github:Automattic/socket.io-client@1.3.5",
     "traceur": "github:jmcriffey/bower-traceur@0.0.88",
