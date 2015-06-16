@@ -16,6 +16,10 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
+
+  socket.on('draw:committed', function(x, y, dragging, clientId){
+    io.emit('draw:committed', x, y, dragging, clientId);
+  });
 });
 
 http.listen(port, function(){

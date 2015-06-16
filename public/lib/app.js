@@ -14,12 +14,12 @@ canvas.mousedown(function(e){
   let mouseY = e.pageY - this.offsetTop;
 
   paint = true;
-  addClick(mouseX, mouseY);
+  commit(mouseX, mouseY);
 });
 
 canvas.mousemove(function(e){
   if(paint){
-    addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+    commit(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
   }
 });
 
@@ -33,9 +33,19 @@ canvas.mouseleave(function(e){
 
 var xs = [], ys = [], drags = [];
 
-function addClick(x, y, dragging){
+function changeModel(x, y, dragging){
   xs.push(x);
   ys.push(y);
   drags.push(dragging);
   canv.redraw(xs, ys, drags);
 }
+
+function commit(x, y, dragging){
+  changeModel(x, y, dragging);
+  socket.emit('draw:committed', x, y, dragging, socket.id);
+}
+
+socket.on('draw:committed', function(x, y, dragging, clientId){
+  if(clientId === socket.id) return;
+  changeModel(x, y, dragging);
+});
