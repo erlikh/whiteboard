@@ -1,5 +1,5 @@
-import drawings from './drawings/component'
-import socket from './socket/component'
+import drawings from './drawings/_component'
+import socket from './socket/_component'
 
 socket();
 drawings();
