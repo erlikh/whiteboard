@@ -12,7 +12,10 @@ app.get('/', function(req, res){
 app.use('/static', express.static(process.env.PWD + '/public'));
 
 io.on('connection', function(socket){
-  console.log('a user connected');
+  console.log('user connected');
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
 });
 
 http.listen(port, function(){

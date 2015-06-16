@@ -1,5 +1,8 @@
 import $ from 'jquery'
 import Canvas from './canvas'
+import io from 'socket.io-client'
+
+var socket = io();
 
 let canv = new Canvas(500, 500);
 
